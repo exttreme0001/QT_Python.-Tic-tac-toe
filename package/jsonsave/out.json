@@ -1,0 +1,120 @@
+{
+  "opponent_1_name": "None",
+  "opponent_2_name": "NaN",
+  "from_path_opp1_pic": "",
+  "from_path_opp2_pic": "",
+  "pict_opp_1": "",
+  "pict_opp_2": "",
+  "canvas_pic": "C:/Users/egori/OneDrive/\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0441\u0442\u043e\u043b/pepe.png",
+  "gameblock1": [
+    "",
+    "",
+    "",
+    "",
+    "X",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock2": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock3": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock4": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock5": [
+    "",
+    "",
+    "",
+    "",
+    "0",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock6": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock7": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock8": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "gameblock9": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "FieldsWin": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "last_index": 4
+}
