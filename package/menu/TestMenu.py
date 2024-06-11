@@ -1,10 +1,10 @@
-from PyQt6.QtWidgets import QMainWindow,QMessageBox
+from PyQt6.QtWidgets import QMainWindow,QMessageBox,QWidget
 
 from PyQt6.QtWidgets import QMenuBar, QMenu
 from PyQt6.QtGui import QAction
 
 class TestMenu(QMenuBar):
-    def __init__(self, parent: QMainWindow):
+    def __init__(self, parent: QWidget):
         super().__init__(parent)
 
         self.stateMItem = QMenu("State")
@@ -15,7 +15,6 @@ class TestMenu(QMenuBar):
         self.addMenu(self.fileMItem)
         self.setMinimumSize(1920,1)
 
-
         self.loadMenuAction = QAction("Load")
         self.stateMItem.addAction(self.loadMenuAction)
 
@@ -24,9 +23,12 @@ class TestMenu(QMenuBar):
 
 
         self.dropdownMenu = QMenu("Dropdown")
-        self.dropdownOption1 = self.dropdownMenu.addAction("Option 1")
-        self.dropdownOption2 = self.dropdownMenu.addAction("Option 2")
-        self.dropdownOption3 = self.dropdownMenu.addAction("Option 3")
+        self.color_canva_action = QAction("Field Color")
+        self.color_x_action = QAction("Color X")
+        self.color_o_action = QAction("Color O")
+        self.dropdownOption1 = self.dropdownMenu.addAction(self.color_canva_action)
+        self.dropdownOption2 = self.dropdownMenu.addAction(self.color_x_action)
+        self.dropdownOption3 = self.dropdownMenu.addAction(self.color_o_action)
         self.editMItem.addMenu(self.dropdownMenu)
 
         self.editMItem.addMenu(self.dropdownMenu)
@@ -39,11 +41,10 @@ class TestMenu(QMenuBar):
         self.openFileAction.setEnabled(False)
 
         # Connect event handlers for blocked menu items
-        self.dropdownOption1.triggered.connect(lambda: self.showBetaMessage("Option 1"))
-        self.dropdownOption2.triggered.connect(lambda: self.showBetaMessage("Option 2"))
-        self.dropdownOption3.triggered.connect(lambda: self.showBetaMessage("Option 3"))
         self.openFileAction.triggered.connect(lambda: self.showBetaMessage("Open"))
-
+        self.color_x_action.triggered.connect(self.parent().canvas.choose_color_x)
+        self.color_o_action.triggered.connect(self.parent().canvas.choose_color_o)
+        self.color_canva_action.triggered.connect(self.parent().canvas.choose_color_canva)
 
     def addLoadActionHandler(self, handler):
         self.loadMenuAction.triggered.connect(handler)

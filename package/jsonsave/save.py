@@ -1,7 +1,9 @@
 import json
 class JsonSave():
   def __init__(self):
-
+        self.field_color=""
+        self.x_color=""
+        self.o_color=""
         self.opponent_1_name=""
         self.opponent_2_name= ""
         self.canvas_pic_path=""
@@ -23,8 +25,11 @@ class JsonSave():
 #collecting data -> parse on json-> send to json file. done.
 #json file -> json class -> init of other blocks
 
-  def save_data(self, opponent_1_name, opponent_2_name,path1,path2,pict_opp_1,pict_opp_2,canvas,blocks,FieldsWin,last_index):
+  def save_data(self,field_color,x_color,o_color, opponent_1_name, opponent_2_name,path1,path2,pict_opp_1,pict_opp_2,canvas,blocks,FieldsWin,last_index):
       data = {
+          "color_field":field_color,
+          "color_x": x_color,
+          "color_o": o_color,
           "opponent_1_name": opponent_1_name,
           "opponent_2_name": opponent_2_name,
           "from_path_opp1_pic": path1,
@@ -44,12 +49,15 @@ class JsonSave():
           "FieldsWin": FieldsWin,
           "last_index": last_index,
       }
-      with open("C:/Users/egori/source/repos/labs_qt/package/jsonsave/out.json", "w") as f:
+      with open("package/jsonsave/state.json", "w") as f:
           json.dump(data, f,indent=2)
   def load_data(self):
     try:
-        with open("C:/Users/egori/source/repos/labs_qt/package/jsonsave/out.json", "r") as f:
+        with open("package/jsonsave/state.json", "r") as f:
             data = json.load(f)
+            self.field_color=data["color_field"]
+            self.x_color=data["color_x"]
+            self.o_color=data["color_o"]
             self.opponent_1_name = data["opponent_1_name"]
             self.opponent_2_name = data["opponent_2_name"]
             self.canvas_pic_path = data["canvas_pic"]

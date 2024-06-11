@@ -11,26 +11,11 @@ class TestGame(QWidget):
         self.FieldBox = QGridLayout(self)
         self.FieldBox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.FieldBox.setSpacing(0)
-        self.FieldBox.setContentsMargins(0, 0, 8, 8)
+        self.FieldBox.setContentsMargins(0, 0, 8, 28)
         self.current= "0"
         self.FieldsWin = [None] * 9
         self.createGameBlocks()#№1
         self.button_index=0
-
-    def dialogFinished(self,result):
-        if type(result) is QColor:
-            color = QColor(result)
-            self.parent.opponent1.setStyleSheet(f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, 1);")
-            self.parent.opponent2.setStyleSheet(f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, 1);")
-
-        else:
-            self.label.setText(str(result))
-
-
-    def openColorDialog(self):
-        dialog = QColorDialog(self)
-        dialog.open()
-        dialog.currentColorChanged.connect(self.dialogFinished)
 
     def disableALLButtons(self):
          for i in range(3):
@@ -60,12 +45,6 @@ class TestGame(QWidget):
                 break
 
     def Winner (self):
-        for i in range(3):
-            for j in range(3):
-                block = self.blocks[i][j]
-                if block.Win !="":
-                    index = i*3+j
-                    self.FieldsWin[index]=block.Win
 
 
         win_conditions = [
@@ -125,6 +104,7 @@ class TestGame(QWidget):
                     self.showDrawMessage()
 
     def blockButtons(self):
+            self.fillFieldsWin()
             for m in range(3):
                 for n in range(3):
                     if m == (self.button_index)//3 and n == (self.button_index) % 3:
@@ -162,7 +142,7 @@ class TestGame(QWidget):
 
     def createCurrentPlayerLabel(self):
         self.label = QLabel()
-        self.FieldBox.addWidget(self.label, 4, 0, 1, 3)
+        self.FieldBox.addWidget(self.label, 3, 0, 1, 3)
         self.label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
 
     def setTextOnLabel(self):
@@ -188,11 +168,8 @@ class TestGame(QWidget):
                 block = self.blocks[i][j]
                 for button in block.buttons:
                     button.clicked.connect(self.needableField)#№2
-                self.colorButton = QPushButton ("Font")
-        self.colorButton.setMinimumSize(490,25)
-        self.FieldBox.addWidget(self.colorButton, 3, 0, 1, 3)
         self.createCurrentPlayerLabel()
-        self.colorButton.clicked.connect(self.openColorDialog)
+
 
     def CheckOnSmallWin(self):
         for i in range(3):
@@ -201,6 +178,7 @@ class TestGame(QWidget):
                 if block.Win !="" and block.BigSymbolDraw == 0:
                     block.BigSymbolDraw = 1
                     self.parent.canvas.draw_block_symbol(i*3+j,block.Win)
+
 
     def findIndexOfBut(self):
         clicked_button = self.sender()
@@ -221,3 +199,11 @@ class TestGame(QWidget):
         QMessageBox.information(self, "Game Over", f"Sorry,but DRAWBLOCKS are unavailable in beta-test")
         self.parent.canvas.clear()
         self.parent.blocksClear()
+
+    def fillFieldsWin(self):
+         for i in range(3):
+            for j in range(3):
+                block = self.blocks[i][j]
+                if block.Win !="":
+                    index = i*3+j
+                    self.FieldsWin[index]=block.Win

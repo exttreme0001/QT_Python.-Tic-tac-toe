@@ -12,9 +12,9 @@ class TestWindow(QMainWindow):
         super().__init__()
         self.setGeometry(0, 0,1920, 1080)
         self.createCentralWidget()
-        self.createMenuBar()
         self.createPlayer1()
         self.createCanvas()
+        self.createMenuBar()
         self.createField()
         self.createPlayer2()
         self.setCentralWidget(self.central_widget)
@@ -69,7 +69,7 @@ class TestWindow(QMainWindow):
         image_path = os.path.join(imgp)
         self.image.save(image_path, "PNG")
         opponent_1_name, opponent_2_name = self.getNameOfPlayer()
-        self.json_save.save_data(opponent_1_name, opponent_2_name,self.opponent1.image_path,self.opponent2.image_path ,self.opponent1.file_name,self.opponent2.file_name,image_path,self.field.blocks,self.field.FieldsWin,self.field.button_index)
+        self.json_save.save_data(self.canvas.canva_color.name(),self.canvas.x_color.name(),self.canvas.o_color.name(),opponent_1_name, opponent_2_name,self.opponent1.image_path,self.opponent2.image_path ,self.opponent1.file_name,self.opponent2.file_name,image_path,self.field.blocks,self.field.FieldsWin,self.field.button_index)
 
     def load_data(self):
         try:
@@ -86,6 +86,9 @@ class TestWindow(QMainWindow):
                 self.opponent2.setImage(self.json_save.from_path_opp2_pic)
             else:
                 self.opponent2.setImage(self.json_save.pict_opp_2)
+            self.canvas.x_color.setNamedColor(self.json_save.x_color)
+            self.canvas.o_color.setNamedColor(self.json_save.o_color)
+            self.canvas.canva_color.setNamedColor(self.json_save.field_color)
             self.canvas.update_canvas_image(self.canvas_image)
             self.field.FieldsWin=self.json_save.FieldsWin
             self.setTextOnBut()

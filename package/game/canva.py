@@ -2,7 +2,7 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QPainter, QPen, QBrush,QPixmap
 from PyQt6.QtWidgets import  QLabel,QWidget
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget,QColorDialog
 class Canvas_Block(QWidget):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -12,6 +12,9 @@ class Canvas_Block(QWidget):
         self.canvas_image = None
         self.canvas.fill(QColor("black"))
         self.label.setGeometry(0, 0, self.canvas.width(), self.canvas.height())
+        self.x_color = QColor("red")
+        self.o_color = QColor("red")
+        self.canva_color = QColor("#376F9F")
         self.draw_border()
         self.draw_lines()
         self.draw_little_lines()
@@ -44,7 +47,7 @@ class Canvas_Block(QWidget):
         pen.setWidth(10)
         pen.setColor(QColor("black"))
         painter.setPen(pen)
-        brush = QBrush(QColor("#376F9F"))
+        brush = QBrush(QColor(self.canva_color))
         painter.setBrush(brush)
 
 
@@ -123,7 +126,7 @@ class Canvas_Block(QWidget):
         painter.setPen(pen)
 
         # Setting up the brush
-        brush = QBrush(QColor("#376F9F"))
+        brush = QBrush(QColor(self.canva_color))
         painter.setBrush(brush)
 
         # Calculating the coordinates of the center of the cell inside the block
@@ -136,11 +139,15 @@ class Canvas_Block(QWidget):
 
         # Character rendering depending on the passed parameter
         if symbol == "X":
+            pen.setColor(QColor(self.x_color))
+            painter.setPen(pen)
             painter.drawLine(center_x - cell_width // 4, center_y - cell_height // 4,
                             center_x + cell_width // 4, center_y + cell_height // 4)
             painter.drawLine(center_x - cell_width // 4, center_y + cell_height // 4,
                             center_x + cell_width // 4, center_y - cell_height // 4)
         elif symbol == "0":
+            pen.setColor(QColor(self.o_color))
+            painter.setPen(pen)
             painter.drawEllipse(center_x - cell_width // 4, center_y - cell_height // 4,
                                 cell_width // 2, cell_height // 2)
         self.update()
@@ -257,3 +264,27 @@ class Canvas_Block(QWidget):
         self.draw_lines()
         self.draw_little_lines()
         self.label.setPixmap(self.canvas)
+
+    def choose_color_x(self):
+        color = QColorDialog.getColor(QColor(self.x_color), self)
+        if color.isValid():
+            self.x_color = color
+
+    def choose_color_o(self):
+        color = QColorDialog.getColor(QColor(self.o_color), self)
+        if color.isValid():
+            self.o_color = color
+
+    def choose_color_canva(self):
+        color = QColorDialog.getColor(QColor(self.canva_color), self)
+        if color.isValid():
+            self.canva_color = color
+            self.clear()
+            for block_index in range(9):
+                for gameblock_index in range(9):
+                    text=self.parent().field.blocks[block_index//3][block_index%3].buttons[gameblock_index].text()
+                    if text!= None:
+                        self.draw_symbol(block_index, gameblock_index//3,gameblock_index%3,text)
+                big_text= self.parent().field.FieldsWin[block_index]
+                if big_text!=None:
+                    self.draw_block_symbol(block_index,big_text)
