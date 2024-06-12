@@ -6,6 +6,7 @@ from Opponent import Opponents
 from game import TestGame
 from game import canva
 import os
+import json
 
 class TestWindow(QMainWindow):
     def __init__(self):
@@ -73,32 +74,41 @@ class TestWindow(QMainWindow):
 
     def load_data(self):
         try:
-            self.blocksClear()
-            self.json_save.load_data()
-            self.opponent1.name_input.setText(self.json_save.opponent_1_name)
-            self.opponent2.name_input.setText(self.json_save.opponent_2_name)
-            self.canvas_image = QPixmap(self.json_save.canvas_pic_path)
-            if self.json_save.from_path_opp1_pic !="":
-                self.opponent1.setImage(self.json_save.from_path_opp1_pic)
+            load_path = self.json_save.select_load_path()
+            if load_path is not None:
+                try:
+                    self.json_save.load_data(load_path)
+                    self.blocksClear()
+                    self.opponent1.name_input.setText(self.json_save.opponent_1_name)
+                    self.opponent2.name_input.setText(self.json_save.opponent_2_name)
+                    self.canvas_image = QPixmap(self.json_save.canvas_pic_path)
+                    if self.json_save.from_path_opp1_pic !="":
+                        self.opponent1.setImage(self.json_save.from_path_opp1_pic)
+                    else:
+                        self.opponent1.setImage(self.json_save.pict_opp_1)
+                    if self.json_save.from_path_opp2_pic !="":
+                        self.opponent2.setImage(self.json_save.from_path_opp2_pic)
+                    else:
+                        self.opponent2.setImage(self.json_save.pict_opp_2)
+                    self.canvas.x_color.setNamedColor(self.json_save.x_color)
+                    self.canvas.o_color.setNamedColor(self.json_save.o_color)
+                    self.canvas.canva_color.setNamedColor(self.json_save.field_color)
+                    self.canvas.update_canvas_image(self.canvas_image)
+                    self.field.FieldsWin=self.json_save.FieldsWin
+                    self.setTextOnBut()
+                    self.field.button_index=self.json_save.buttonIndex
+                    self.field.blockButtons()
+                    self.display_canvas_image()
+                except FileNotFoundError:
+                    print("FileNotFound")
+                except json.JSONDecodeError:
+                    print("JSONDecodeError.")
+                except Exception as e:
+                    print(f"Exception: {e}")
             else:
-                self.opponent1.setImage(self.json_save.pict_opp_1)
-            if self.json_save.from_path_opp2_pic !="":
-                self.opponent2.setImage(self.json_save.from_path_opp2_pic)
-            else:
-                self.opponent2.setImage(self.json_save.pict_opp_2)
-            self.canvas.x_color.setNamedColor(self.json_save.x_color)
-            self.canvas.o_color.setNamedColor(self.json_save.o_color)
-            self.canvas.canva_color.setNamedColor(self.json_save.field_color)
-            self.canvas.update_canvas_image(self.canvas_image)
-            self.field.FieldsWin=self.json_save.FieldsWin
-            self.setTextOnBut()
-            self.field.button_index=self.json_save.buttonIndex
-            self.field.blockButtons()
-            #basic buttons done
+                print("canceled")
+                return
 
-
-
-            self.display_canvas_image()
         except FileNotFoundError:
                     pass
     def display_canvas_image(self):
