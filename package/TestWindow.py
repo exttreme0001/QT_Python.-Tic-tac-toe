@@ -66,7 +66,7 @@ class TestWindow(QMainWindow):
 
     def save_data(self):
         self.image = self.canvas.grab().toImage()
-        imgp='C:/Users/egori/OneDrive/Рабочий стол/pepe.png'
+        imgp='canvas_img.png'
         image_path = os.path.join(imgp)
         self.image.save(image_path, "PNG")
         opponent_1_name, opponent_2_name = self.getNameOfPlayer()
