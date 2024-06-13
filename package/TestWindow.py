@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QMainWindow, QHBoxLayout,QVBoxLayout, QWidget
-from PyQt6.QtGui import QPixmap,QPainter
+from PyQt6.QtGui import QPixmap,QPainter,QColor
 from jsonsave.save import JsonSave
 from menu import TestMenu
 from Opponent import Opponents
@@ -19,6 +19,7 @@ class TestWindow(QMainWindow):
         self.createField()
         self.createPlayer2()
         self.setCentralWidget(self.central_widget)
+        self.json_save_colors = JsonSave()
         self.json_save = JsonSave()
 
 
@@ -61,8 +62,11 @@ class TestWindow(QMainWindow):
         self.menuBar = TestMenu(self)
         self.menuBar.addLoadActionHandler(self.load_data)
         self.menuBar.addSaveActionHandler(self.save_data)
-        self.menuBar.addOpenFileActionHandler(self.openFile)
+        self.menuBar.addLoadColorsActionHandler(self.load_colors)
+        self.menuBar.addSaveColorsActionHandler(self.save_ALLcolors)
         self.setMenuBar(self.menuBar)
+    def save_ALLcolors(self):
+        self.json_save_colors.save_colors(self.canvas.canva_color.name(),self.canvas.x_color.name(),self.canvas.o_color.name())
 
     def save_data(self):
         self.image = self.canvas.grab().toImage()
@@ -71,7 +75,29 @@ class TestWindow(QMainWindow):
         self.image.save(image_path, "PNG")
         opponent_1_name, opponent_2_name = self.getNameOfPlayer()
         self.json_save.save_data(self.canvas.canva_color.name(),self.canvas.x_color.name(),self.canvas.o_color.name(),opponent_1_name, opponent_2_name,self.opponent1.image_path,self.opponent2.image_path ,self.opponent1.file_name,self.opponent2.file_name,image_path,self.field.blocks,self.field.FieldsWin,self.field.button_index)
+    def load_colors(self):
+        try:
+            load_path = self.json_save_colors.select_load_path()
+            if load_path is not None:
+                try:
+                    self.json_save_colors.load_colors(load_path)
+                    self.canvas.x_color.setNamedColor(self.json_save_colors.x_color)
+                    self.canvas.o_color.setNamedColor(self.json_save_colors.o_color)
+                    self.canvas.canva_color.setNamedColor(self.json_save_colors.field_color)
+                    self.canvas.changing_color(QColor(self.json_save_colors.field_color))
 
+                except FileNotFoundError:
+                 print("FileNotFound")
+                except json.JSONDecodeError:
+                    print("JSONDecodeError.")
+                except Exception as e:
+                    print(f"Exception: {e}")
+            else:
+                print("canceled")
+                return
+
+        except FileNotFoundError:
+                pass
     def load_data(self):
         try:
             load_path = self.json_save.select_load_path()
@@ -117,8 +143,6 @@ class TestWindow(QMainWindow):
             painter.drawPixmap(0, 0, self.canvas_image)
             painter.end()
 
-    def openFile(self):
-        self.central_widget_label.setText("Open file action triggered")
     def getNameOfOpp1(self):
         name=self.opponent1.name_input
         return name

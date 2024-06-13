@@ -26,6 +26,17 @@ class JsonSave():
         self.FieldsWin=[]
         self.buttonIndex=0
 
+    def save_colors(self,field_color,x_color,o_color):
+        data = {"color_field":field_color,
+            "color_x": x_color,
+            "color_o": o_color,
+        }
+        save_path = self.select_save_path()
+        if save_path:
+            with open(save_path, "w") as f:
+                json.dump(data, f,indent=2)
+
+
     def save_data(self,field_color,x_color,o_color, opponent_1_name, opponent_2_name,path1,path2,pict_opp_1,pict_opp_2,canvas,blocks,FieldsWin,last_index):
         data = {
             "color_field":field_color,
@@ -54,6 +65,16 @@ class JsonSave():
         if save_path:
             with open(save_path, "w") as f:
                 json.dump(data, f,indent=2)
+
+    def load_colors(self,load_path):
+        try:
+                with open(load_path, "r") as f:
+                    data = json.load(f)
+                    self.field_color=data["color_field"]
+                    self.x_color=data["color_x"]
+                    self.o_color=data["color_o"]
+        except FileNotFoundError:
+            pass
 
     def load_data(self,load_path):
 

@@ -277,6 +277,9 @@ class Canvas_Block(QWidget):
 
     def choose_color_canva(self):
         color = QColorDialog.getColor(QColor(self.canva_color), self)
+        self.changing_color(color)
+
+    def changing_color(self,color):
         if color.isValid():
             self.canva_color = color
             self.clear()
